@@ -87,6 +87,9 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
             ),
+            SizedBox(height: 20),
+            ElevatedButton(onPressed: _incrementCounter, child: Text('Increment')),
+            
           ],
         ),
       ),
