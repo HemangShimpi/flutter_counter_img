@@ -31,8 +31,21 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin{
   int _counter = 0;
+  bool _showFirstImg = true;
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    );
+    _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -43,6 +56,18 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
+  }
+
+  void _toggleImg() {
+    setState(() {
+      _showFirstImg = !_showFirstImg;
+      _controller.forward(from: 0.0);
+    });
+  }
+
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -89,7 +114,18 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             SizedBox(height: 20),
             ElevatedButton(onPressed: _incrementCounter, child: Text('Increment')),
-            
+            SizedBox(height: 40),
+            FadeTransition(
+              opacity: _animation, 
+              child: Image.asset(
+                _showFirstImg ? 'assets/check.png' : 'assets/cross.png', 
+                width: 200, 
+                height: 200
+              )
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(onPressed: _toggleImg, child: Text('Toggle Image'),
+            ),
           ],
         ),
       ),
